@@ -1,0 +1,50 @@
+# The whole stack on one machine: load balancer, game server, PostgreSQL.
+#
+#   docker compose up --build                 # http://localhost
+#   docker compose up --build --scale app=4   # more game servers (moves between them can lag up to 5 s;
+#                                             # see docs/ARCHITECTURE.md, "Running several servers")
+#   SITE_ADDRESS=play.example.com docker compose up -d   # public, with automatic HTTPS
+#
+# Every image is open source and nothing here calls an outside service
+# (with a real domain, Caddy fetches a free certificate from Let's Encrypt).
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on: [app]
+
+  app:
+    build: .
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+    environment:
+      DATABASE_URL: postgres://lom:${POSTGRES_PASSWORD:-lom}@postgres:5432/lom
+      TRUST_PROXY: "1"
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lom
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lom}
+      POSTGRES_DB: lom
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lom -d lom"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:
+  caddy_data:
