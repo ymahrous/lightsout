@@ -83,6 +83,11 @@ export async function createHttpHandler({ metrics, production, ready }) {
       if (url === '/healthz') return text(res, 200, 'ok');
       if (url === '/readyz') { const ok = await ready(); return text(res, ok ? 200 : 503, ok ? 'ready' : 'not ready'); }
       if (url === '/metrics') return text(res, 200, metrics.render(), 'text/plain; version=0.0.4; charset=utf-8');
+      // /faq/ and the like lead to the page itself. Only known pages redirect, so this never points off-site.
+      if (url.length > 1 && url.endsWith('/') && routes.has(url.slice(0, -1))) {
+        res.writeHead(301, { Location: url.slice(0, -1) + (req.url || '').slice(url.length), 'Cache-Control': 'public, max-age=86400', ...HEADERS });
+        return res.end();
+      }
       const route = routes.get(url) || { ...routes.get('/404.html'), cc: 'no-cache' };
       if (!routes.has(url)) {
         const a = await asset(route);

@@ -36,7 +36,7 @@ No tools to install. Use this if you are not comfortable with a terminal.
 
 ## Route B: the config file
 
-`.railway/railway.ts` describes the same three services in code. It uses Railway's current format; the older `railway.json` stops being read on 2026-12-01.
+`.railway/railway.ts` describes the same two services (`web` and `Postgres`) in code. It uses Railway's current format; the older `railway.json` stops being read on 2026-12-01.
 
 You need the [Railway CLI](https://docs.railway.com/cli) (5.42.1 or newer) and this repo's dev dependencies (`npm install`).
 

@@ -11,7 +11,8 @@ const SHELL = [
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png',
   '/vendor/three/three.module.js', '/vendor/three/three.core.js',
   '/vendor/fonts/bodoni-moda.woff2', '/vendor/fonts/bodoni-moda-italic.woff2', '/vendor/fonts/manrope.woff2',
-  '/vendor/fonts/dm-mono-400.woff2', '/vendor/fonts/dm-mono-500.woff2'
+  '/vendor/fonts/dm-mono-400.woff2', '/vendor/fonts/dm-mono-500.woff2',
+  '/faq', '/privacy', '/terms', '/legal.css'
 ];
 const LIVE = new Set(['/ws', '/healthz', '/readyz', '/metrics']);
 
@@ -34,8 +35,14 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin || LIVE.has(url.pathname)) return;
   if (req.mode === 'navigate') {
-    // Every page is the same app. Serve the cached one at once; it works offline and never waits on the network.
-    e.respondWith(caches.match('/').then(hit => hit || fetch(req)));
+    // The game itself (invite links are /#room-xxxxx) opens from the cache at once and never waits on the network.
+    if (url.pathname === '/' || url.pathname === '/index.html') {
+      e.respondWith(caches.match('/').then(hit => hit || fetch(req)));
+      return;
+    }
+    // Every other page comes from the server, so it is always the page asked for and always current.
+    // With no connection, the saved copy of the FAQ and legal pages is shown instead.
+    e.respondWith(fetch(req).catch(() => caches.match(req, { ignoreSearch: true }).then(hit => hit || Response.error())));
     return;
   }
   e.respondWith(caches.match(req, { ignoreSearch: true }).then(hit => hit || fetch(req)));

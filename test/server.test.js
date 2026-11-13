@@ -33,6 +33,13 @@ test('http: the site, health checks and metrics', async () => {
     // Nothing outside the published files can be fetched.
     for (const p of ['/server/index.js', '/package.json', '/..%2fpackage.json', '/js/../../package.json', '/.env', '/node_modules/ws/package.json']) assert.equal((await get(app, p)).status, 404, p);
     assert.equal((await fetch(`http://127.0.0.1:${app.port}/`, { method: 'POST' })).status, 405);
+    // Every page opens at its clean address, and a trailing slash leads to the same page.
+    for (const [p, title] of [['/faq', 'FAQ'], ['/privacy', 'Privacy Policy'], ['/terms', 'Terms of Service']]) {
+      r = await get(app, p); assert.equal(r.status, 200, p); assert.match(await r.text(), new RegExp(`<title>${title} — `), p);
+      r = await fetch(`http://127.0.0.1:${app.port}${p}/?ref=x`, { redirect: 'manual' });
+      assert.equal(r.status, 301, p + '/'); assert.equal(r.headers.get('location'), p + '?ref=x');
+    }
+    r = await get(app, '/no-such-page'); assert.equal(r.status, 404); assert.match(await r.text(), /<title>Page not found/);
     // Installable: a manifest, icons, and a service worker stamped with the current version.
     r = await get(app, '/manifest.webmanifest');
     assert.match(r.headers.get('content-type'), /application\/manifest\+json/);
