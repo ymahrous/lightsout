@@ -83,8 +83,14 @@ export async function createHttpHandler({ metrics, production, ready }) {
       if (url === '/healthz') return text(res, 200, 'ok');
       if (url === '/readyz') { const ok = await ready(); return text(res, ok ? 200 : 503, ok ? 'ready' : 'not ready'); }
       if (url === '/metrics') return text(res, 200, metrics.render(), 'text/plain; version=0.0.4; charset=utf-8');
-      const route = routes.get(url);
-      if (!route) return text(res, 404, 'Not found');
+      const route = routes.get(url) || { ...routes.get('/404.html'), cc: 'no-cache' };
+      if (!routes.has(url)) {
+        const a = await asset(route);
+        const head = { 'Content-Type': a.type, 'Cache-Control': a.cc, ETag: a.etag, Vary: 'Accept-Encoding', ...HEADERS };
+        head['Content-Length'] = a.buf.length;
+        res.writeHead(404, head);
+        return res.end(req.method === 'HEAD' ? undefined : a.buf);
+      }
       const a = await asset(route);
       const head = { 'Content-Type': a.type, 'Cache-Control': a.cc, ETag: a.etag, Vary: 'Accept-Encoding', ...HEADERS };
       if (req.headers['if-none-match'] === a.etag) { res.writeHead(304, head); return res.end(); }
