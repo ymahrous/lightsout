@@ -1,0 +1,18 @@
+@font-face{font-family:"Bodoni Moda";font-style:normal;font-weight:400 900;font-display:swap;src:url(/vendor/fonts/bodoni-moda.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(/vendor/fonts/manrope.woff2) format("woff2")}
+:root{color-scheme:dark;--ink:#0d0a14;--velvet:#191322;--bone:#efe7da;--ash:#aba0b8;--brass:#d2ab63}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(145deg,#0d0a14,#241832 60%,#4a2a48);color:var(--bone);font:16px/1.65 "Manrope",system-ui,sans-serif}
+.page{max-width:760px;margin:0 auto;padding:32px 20px 72px}
+.brand{color:var(--bone);font:600 24px/1.1 "Bodoni Moda",Georgia,serif;text-decoration:none}
+.brand em{color:var(--brass)}
+nav{display:flex;gap:18px;margin:28px 0 42px;font-size:14px}
+nav a{color:var(--ash);text-underline-offset:4px}
+nav a:hover{color:var(--bone)}
+h1,h2{font-family:"Bodoni Moda",Georgia,serif;line-height:1.1}
+h1{font-size:clamp(42px,8vw,68px);margin:0 0 16px}
+h2{font-size:28px;margin:40px 0 10px;color:var(--brass)}
+p{max-width:68ch;margin:0 0 16px}
+dt{font-weight:700;margin-top:24px}
+dd{margin:5px 0 0 0;color:var(--ash)}
+.updated{color:var(--ash);font-size:13px}

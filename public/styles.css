@@ -68,6 +68,9 @@ p{margin:0}
 .rolecard svg{width:26px;height:26px;color:var(--rc)}
 .rolecard p{color:var(--ash);font-size:13.5px}
 .rM{--rc:var(--garnet)} .rD{--rc:var(--moon)} .rH{--rc:var(--verdigris)} .rV{--rc:var(--brass)} .rR{--rc:#c9bfdc}
+.site-links{display:flex;gap:18px;justify-content:center;padding-top:8px;font-size:13px}
+.site-links a{color:var(--ash);text-underline-offset:4px}
+.site-links a:hover{color:var(--bone)}
 @media(min-width:900px){
   .home{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-areas:"hero join" "facts join" "roles roles";column-gap:56px;align-items:start;padding-block:56px 80px}
   .roles{margin-top:20px}

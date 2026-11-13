@@ -276,6 +276,9 @@ function vHome() {
       <li><span><b>One phone is enough.</b> Pass it around, or let a referee hold it and run the night out loud.</span></li>
   </ul>
   <section class="roles" aria-label="The roles">${['M', 'D', 'H', 'V', 'R'].map(k => `<div class="rolecard r${k}">${RICON[k]}<h3>${ROLE[k].name}</h3><p>${ROLE[k].blurb}</p></div>`).join('')}</section>
+  <nav class="site-links" aria-label="Information">
+    <a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a>
+  </nav>
   </main>`;
 }
 function vLocalSetup() {
