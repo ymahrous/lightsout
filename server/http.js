@@ -43,6 +43,9 @@ export async function createHttpHandler({ metrics, production, ready }) {
   const routes = new Map();
   for (const rel of await walk(path.join(ROOT, 'public'))) routes.set(rel, { file: path.join(ROOT, 'public', rel), cc: 'no-cache' });
   routes.set('/', routes.get('/index.html'));
+  routes.set('/faq', routes.get('/faq.html'));
+  routes.set('/privacy', routes.get('/privacy.html'));
+  routes.set('/terms', routes.get('/terms.html'));
   routes.set('/shared/engine.js', { file: path.join(ROOT, 'shared/engine.js'), cc: 'no-cache' });
   for (const [url, rel] of Object.entries(VENDOR)) routes.set(url, { file: path.join(ROOT, rel), cc: 'public, max-age=604800' });
 
