@@ -1,0 +1,37 @@
+{
+  "name": "lights-out-mafia",
+  "version": "1.0.0",
+  "description": "A real-time Mafia party game. Rooms by code, no accounts, every player a lit window in a 3D town.",
+  "keywords": [
+    "mafia",
+    "werewolf",
+    "party-game",
+    "websocket",
+    "multiplayer",
+    "threejs",
+    "postgresql"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test --test-concurrency=1 \"test/*.test.js\"",
+    "loadtest": "node scripts/loadtest.js"
+  },
+  "dependencies": {
+    "@fontsource-variable/bodoni-moda": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource/dm-mono": "^5.3.0",
+    "pg": "^8.23.1",
+    "three": "^0.187.0",
+    "ws": "^8.22.2"
+  },
+  "devDependencies": {
+    "railway": "^3.16.0"
+  }
+}
