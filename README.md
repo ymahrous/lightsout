@@ -135,6 +135,10 @@ npm run loadtest -- --url ws://localhost:8080/ws --rooms 200 --players 8
 
 Raise `MAX_CONN_PER_IP` and `CREATE_PER_MINUTE` on the servers first, because every simulated player comes from your one address. The script exits non-zero if any table ends inconsistent.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). The principles every change has to keep are in [CONSTITUTION.md](CONSTITUTION.md), and coding agents read [AGENTS.md](AGENTS.md).
+
 ## Licence
 
 MIT. See [LICENSE](LICENSE).
